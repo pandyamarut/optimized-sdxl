@@ -1,27 +1,18 @@
-# Base image -> https://github.com/runpod/containers/blob/main/official-templates/base/Dockerfile
-# DockerHub -> https://hub.docker.com/r/runpod/base/tags
-FROM runpod/base:0.4.0-cuda11.8.0
+# Base image
+FROM runpod/base:0.4.2-cuda11.8.0
 
-# The base image comes with many system dependencies pre-installed to help you get started quickly.
-# Please refer to the base image's Dockerfile for more information before adding additional dependencies.
-# IMPORTANT: The base image overrides the default huggingface cache location.
+ENV HF_HUB_ENABLE_HF_TRANSFER=0
 
-
-# --- Optional: System dependencies ---
-# COPY builder/setup.sh /setup.sh
-# RUN /bin/bash /setup.sh && \
-#     rm /setup.sh
-
-
-# Python dependencies
+# Install Python dependencies (Worker Template)
 COPY builder/requirements.txt /requirements.txt
 RUN python3.11 -m pip install --upgrade pip && \
     python3.11 -m pip install --upgrade -r /requirements.txt --no-cache-dir && \
     rm /requirements.txt
 
-# NOTE: The base image comes with multiple Python versions pre-installed.
-#       It is reccommended to specify the version of Python when running your code.
-
+# Cache Models
+COPY builder/cache_models.py /cache_models.py
+RUN python3.11 /cache_models.py && \
+    rm /cache_models.py
 
 # Add src files (Worker Template)
 ADD src .

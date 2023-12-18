@@ -6,3 +6,13 @@
 # To learn more, see https://pip.pypa.io/en/stable/reference/requirements-file-format/
 
 runpod==1.4.0
+
+torch
+diffusers
+transformers
+Pillow
+accelerate
+xformers
+safetensors
+invisible_watermark
+hf_transfer
